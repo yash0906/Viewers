@@ -9,7 +9,7 @@ function getMode(id) {
   });
 
   if (!mode) {
-    throw new Error(`Mode not found for modeId ${id}`);
+    throw new Error(`Mode not found for id ${id}`);
   }
 
   return mode;
@@ -21,10 +21,22 @@ function getDataSource(id) {
   });
 
   if (!dataSource) {
-    throw new Error(`DataSource not found for dataSourceId ${id}`);
+    throw new Error(`DataSource not found for id ${id}`);
   }
 
   return dataSource;
+}
+
+function getSOPClassHandler(id) {
+  const sopClassHandler = window.sopClassHandlers.find(a => {
+    return a.id === id;
+  });
+
+  if (!sopClassHandler) {
+    throw new Error(`SOPClassHandler not found for id ${id}`);
+  }
+
+  return sopClassHandler;
 }
 
 /*const ViewModelContext = React.createContext(
@@ -54,27 +66,75 @@ class ViewModelProvider extends Component {
   }
 }*/
 
+class SOPClassHandlerManager() {
+  constructor(sopClassHandlerIds) {
+    this.SOPClassHandlers = sopClassHandlerIds.map(getSOPClassHandler);
+  }
+
+  async createDisplaySets() {
+    const SOPClassHandlers = this.SOPClassHandlers;
+
+    const displaySets = [];
+    StudyMetadata.forEachSeries(series => {
+      for (let i = 0; i < SOPClassHandlers.length; i++) {
+        const handler = SOPClassHandlers[i];
+
+        // TODO: This step is still unclear to me
+        const displaySet = handler(series);
+
+        if (displaySet) {
+          displaySets.push(displaySet);
+        }
+      }
+    });
+
+    return displaySets;
+  }
+}
+
 function ModeRoute({ match: routeMatch, location: routeLocation }) {
   const {
     modeId
     dataSourceId,
   } = routeMatch.params;
 
+  const modeRoute = 'default';
+
   const [displaySets, setDisplaySets] = useState([]);
-  const ModeComponent = getMode(modeId).component;
+  const { routes, sopClassHandlers } = getMode(modeId);
+
+  // Only handling one route per mode for now
+  const ModeComponent = routes[0].layoutTemplate;
+
   const dataSource = getDataSource(dataSourceId);
   const queryParams = location.search;
 
+  // Add SOPClassHandlers to a new SOPClassManager.
+  const manager = new SOPClassHandlerManager(sopClassHandlers);
+
   // Call the data source to start building the view model?
-  dataSource(queryParams, setDisplaySets);
+  dataSource(queryParams, onUpdatedCallback);
 
-  // SOPClassManager?
+  const onUpdatedCallback = () => {
+    // TODO: This should append, not create from scratch so we don't nuke existing display sets
+    // when e.g. a new series arrives
+    manager.createDisplaySets.then(setDisplaySets);
+  }
 
+  const ExtensionContexts = () => {this}
+
+  /*
+  TODO: How are contexts provided by extensions passed into the mode?
+   
   return (
     <ExtensionContexts>
       <ModeComponent displaySets={displaySets} setDisplaySets={setDisplaySets}/>
     </ExtensionContexts>
-  );
+  );*/
+
+  return (
+    <ModeComponent displaySets={displaySets} setDisplaySets={setDisplaySets}/>
+  )
 }
 
 /*
