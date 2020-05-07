@@ -101,7 +101,7 @@ function ModeRoute({ match: routeMatch, location: routeLocation }) {
   const modeRoute = 'default';
 
   const [displaySets, setDisplaySets] = useState([]);
-  const { routes, sopClassHandlers } = getMode(modeId);
+  const { routes, sopClassHandlers, extensions } = getMode(modeId);
 
   // Only handling one route per mode for now
   const ModeComponent = routes[0].layoutTemplate;
@@ -121,11 +121,15 @@ function ModeRoute({ match: routeMatch, location: routeLocation }) {
     manager.createDisplaySets.then(setDisplaySets);
   }
 
-  const ExtensionContexts = () => {this}
+  // TODO: Should extensions provide an array of these or one nested context?
+  const contextModules = extensions.getContextModules();
+  const ExtensionContexts = (contextModules) => {
+
+  }
 
   /*
   TODO: How are contexts provided by extensions passed into the mode?
-   
+
   return (
     <ExtensionContexts>
       <ModeComponent displaySets={displaySets} setDisplaySets={setDisplaySets}/>
