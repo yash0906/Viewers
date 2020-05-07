@@ -5,11 +5,16 @@ import { Switch, Route } from 'react-router-dom';
 import StudyListContainer from './StudyListContainer';
 import NotFound from './NotFound';
 
+import buildModeRoutes from './buildModeRoutes';
+
 const appRoutes = [
   { path: '/', exact: true, component: StudyListContainer },
   { path: '/viewer/:studyInstanceUids', component: NotFound },
   { component: NotFound },
 ];
+
+const modeRoutes = buildModeRoutes(window.modes, window.dataSources);
+appRoutes
 
 const routes = () => {
   return (
