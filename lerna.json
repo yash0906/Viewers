@@ -1,6 +1,6 @@
 {
   "version": "independent",
-  "packages": ["extensions/*", "platform/*"],
+  "packages": ["extensions/*", "modes/*", "datasources/*", "platform/*"],
   "npmClient": "yarn",
   "useWorkspaces": true,
   "command": {

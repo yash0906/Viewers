@@ -1,7 +1,46 @@
 import { React, Component, useState } from 'react';
 
-import StudyListContainer from './routes/StudyListContainer';
-import NotFound from './routes/NotFound';
+import StudyListContainer from './StudyListContainer';
+import NotFound from './NotFound';
+
+/*
+  Routes uniquely define an entry point to:
+  - A mode
+  - Linked to a data source
+  - With a specified data set.
+
+  The full route template is:
+
+  /:modeId/:modeRoute/:sourceType/?queryParameters=example
+
+  Where:
+  :modeId - Is the mode selected.
+  :modeRoute - Is the route within the mode to select.
+  :sourceType - Is the data source identifier, which specifies which DataSource to use.
+  ?queryParameters - Are query parameters as defined by data source.
+
+  A default source can be specified at the app level configuration, and then that source is used if :sourceType is omitted:
+
+  /:modeId/:modeRoute/?queryParameters=example
+ */
+export default function buildModeRoutes(modes, dataSources) {
+  const routes = [];
+  const component = ModeRoute;
+
+  modes.forEach(mode => {
+    dataSources.forEach(dataSource => {
+      const path = `/${mode.id}/${dataSource.id}`;
+
+      routes.push({
+        path: `/${mode.id}/${dataSource.id}`,
+        component,
+        exact: true,
+      });
+    });
+  });
+
+  return routes;
+}
 
 function getMode(id) {
   const mode = window.modes.find(a => {
@@ -66,7 +105,7 @@ class ViewModelProvider extends Component {
   }
 }*/
 
-class SOPClassHandlerManager() {
+class SOPClassHandlerManager {
   constructor(sopClassHandlerIds) {
     this.SOPClassHandlers = sopClassHandlerIds.map(getSOPClassHandler);
   }
@@ -93,10 +132,7 @@ class SOPClassHandlerManager() {
 }
 
 function ModeRoute({ match: routeMatch, location: routeLocation }) {
-  const {
-    modeId
-    dataSourceId,
-  } = routeMatch.params;
+  const { modeId, dataSourceId } = routeMatch.params;
 
   const modeRoute = 'default';
 
@@ -119,13 +155,11 @@ function ModeRoute({ match: routeMatch, location: routeLocation }) {
     // TODO: This should append, not create from scratch so we don't nuke existing display sets
     // when e.g. a new series arrives
     manager.createDisplaySets.then(setDisplaySets);
-  }
+  };
 
   // TODO: Should extensions provide an array of these or one nested context?
   const contextModules = extensions.getContextModules();
-  const ExtensionContexts = (contextModules) => {
-
-  }
+  const ExtensionContexts = contextModules => {};
 
   /*
   TODO: How are contexts provided by extensions passed into the mode?
@@ -137,45 +171,6 @@ function ModeRoute({ match: routeMatch, location: routeLocation }) {
   );*/
 
   return (
-    <ModeComponent displaySets={displaySets} setDisplaySets={setDisplaySets}/>
-  )
-}
-
-/*
-  Routes uniquely define an entry point to:
-  - A mode
-  - Linked to a data source
-  - With a specified data set.
-
-  The full route template is:
-
-  /:modeId/:modeRoute/:sourceType/?queryParameters=example
-
-  Where:
-  :modeId - Is the mode selected.
-  :modeRoute - Is the route within the mode to select.
-  :sourceType - Is the data source identifier, which specifies which DataSource to use.
-  ?queryParameters - Are query parameters as defined by data source.
-
-  A default source can be specified at the app level configuration, and then that source is used if :sourceType is omitted:
-
-  /:modeId/:modeRoute/?queryParameters=example
- */
-function buildModeRoutes(modes, dataSources) {
-  const routes = [];
-  const component = (<ModeRoute/>);
-
-  modes.forEach(mode => {
-    dataSources.forEach(dataSource => {
-      const path = `/${mode.id}/${dataSource.id}`;
-
-      routes.push({
-        path: `/${mode.id}/${dataSource.id}`,
-        component,
-        exact: true
-      });
-    });
-  });
-
-  return routes;
+    <ModeComponent displaySets={displaySets} setDisplaySets={setDisplaySets} />
+  );
 }

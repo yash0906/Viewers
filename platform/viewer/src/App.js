@@ -3,17 +3,51 @@ import PropTypes from 'prop-types';
 import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { ThemeWrapper } from '@ohif/ui';
 
+import { ServicesManager } from '@ohif/core';
 import routes from './routes';
 
-function App({ config }) {
+const servicesManager = new ServicesManager();
+
+function App({ config, defaultExtensions, defaultModes }) {
+  const appDefaultConfig = {
+    showStudyList: true,
+    extensions: [],
+    modes: [],
+    dataSources: [DicomWebDataSource],
+    routerBasename: '/',
+  };
+
+  const appConfig = {
+    ...appDefaultConfig,
+    ...(typeof config === 'function' ? config({ servicesManager }) : config),
+  };
+
+  const { extensions, modes, dataSources } = appConfig;
+
+  _initExtensions(
+    [...defaultExtensions, ...extensions],
+    cornerstoneExtensionConfig,
+    this._appConfig
+  );
+
+  const {
+    servers,
+    hotkeys: appConfigHotkeys,
+    cornerstoneExtensionConfig,
+    extensions,
+    oidc,
+  } = this._appConfig;
+
   const { routerBasename } = config;
   const Router = JSON.parse(process.env.USE_HASH_ROUTER)
     ? HashRouter
     : BrowserRouter;
 
-  return (
+  appConfig.modes = [...appConfig.modes, ...defaultModes];
+
+  config.return(
     <Router basename={routerBasename}>
-      <ThemeWrapper>{routes()}</ThemeWrapper>
+      <ThemeWrapper>{routes(config)}</ThemeWrapper>
     </Router>
   );
 }

@@ -52,6 +52,7 @@
   "dependencies": {
     "@babel/runtime": "7.7.6",
     "@ohif/core": "^2.5.1",
+    "@ohif/mode-example": "0.0.1",
     "@ohif/extension-cornerstone": "^2.4.0",
     "@ohif/extension-dicom-html": "^1.1.0",
     "@ohif/extension-dicom-microscopy": "^0.50.6",

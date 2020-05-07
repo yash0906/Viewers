@@ -13,10 +13,11 @@ const appRoutes = [
   { component: NotFound },
 ];
 
-const modeRoutes = buildModeRoutes(window.modes, window.dataSources);
-appRoutes
+//const modeRoutes = buildModeRoutes(window.modes, window.dataSources);
 
-const routes = () => {
+const routes = config => {
+  const modes = [...config.modes, ...config.defaultModes];
+
   return (
     <Switch>
       {appRoutes.map((route, i) => {

@@ -3,15 +3,17 @@
 //
 // Borrowing from here:
 // https://github.com/facebook/jest/issues/3112#issuecomment-398581705
-const base = require("./jest.config.base.js");
+const base = require('./jest.config.base.js');
 
 module.exports = {
   ...base,
   // https://jestjs.io/docs/en/configuration#projects-array-string-projectconfig
   projects: [
     // "<rootDir>/extensions/*/jest.config.js",
-    "<rootDir>/platform/*/jest.config.js",
-    "<rootDir>/extensions/*/jest.config.js"
+    '<rootDir>/platform/*/jest.config.js',
+    '<rootDir>/extensions/*/jest.config.js',
+    '<rootDir>/modes/*/jest.config.js',
+    '<rootDir>/datasources/*/jest.config.js',
   ],
-  coverageDirectory: "<rootDir>/coverage/"
+  coverageDirectory: '<rootDir>/coverage/',
 };

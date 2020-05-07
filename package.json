@@ -4,7 +4,9 @@
   "workspaces": {
     "packages": [
       "platform/*",
-      "extensions/*"
+      "extensions/*",
+      "modes/*",
+      "datasources/*"
     ]
   },
   "engines": {
