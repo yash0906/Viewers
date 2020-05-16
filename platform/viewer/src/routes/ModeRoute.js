@@ -21,6 +21,7 @@ export default function ModeRoute({
     setDisplaySetInstanceUids,
   } = useViewModel();
 
+  console.warn('ModeRoute rerendering');
   // TODO: For now assume one unique datasource.
 
   const dataSource = dataSources[0];

@@ -27,18 +27,49 @@ function getImageSrc(imageId, { cornerstone }) {
   });
 }
 
-function StudyBrowserPanel({ getDataSources, commandsManager }) {
-  const viewModel = useViewModel();
-
-  const dataSource = getDataSources('dicomweb')[0];
+function StudyBrowserUIData({ getDataSources, commandsManager }) {
+  const [activeTabName, setActiveTabName] = useState('primary');
   const [studyData, setStudyData] = useState([]);
   const [thumbnailImageSrcMap, setThumbnailImageSrcMap] = useState(new Map());
   const updateThumbnailMap = (k, v) => {
     setThumbnailImageSrcMap(thumbnailImageSrcMap.set(k, v));
   };
+
+  console.log('StudyBrowserUIData rerender');
+
+  return (
+    <StudyBrowserPanel
+      activeTabName={activeTabName}
+      getDataSources={getDataSources}
+      commandsManager={commandsManager}
+      onSetTabActive={setActiveTabName}
+      studyData={studyData}
+      setStudyData={setStudyData}
+      thumbnailImageSrcMap={thumbnailImageSrcMap}
+      updateThumbnailMap={updateThumbnailMap}
+    />
+  );
+}
+
+function StudyBrowserPanel({
+  activeTabName,
+  getDataSources,
+  commandsManager,
+  onSetTabActive,
+  studyData,
+  setStudyData,
+  thumbnailImageSrcMap,
+  updateThumbnailMap,
+}) {
+  console.warn('StudyBrowserPanel rerender');
+  const viewModel = useViewModel();
+
+  const dataSource = getDataSources('dicomweb')[0];
+
   const viewportData = []; //useViewportGrid();
   const seriesTracking = {}; //useSeriesTracking();
 
+  // This effect
   useEffect(() => {
     if (!viewModel.displaySetInstanceUids.length) {
       return;
@@ -192,7 +223,7 @@ function StudyBrowserPanel({ getDataSources, commandsManager }) {
     });
 
     return () => (isSubscribed = false);
-  }, [viewModel.displaySetInstanceUids]);
+  }, [viewModel.displaySetInstanceUids, thumbnailImageSrcMap, setStudyData]);
 
   studyData.forEach(study => {
     study.displaySets.forEach(ds => {
@@ -251,13 +282,20 @@ function StudyBrowserPanel({ getDataSources, commandsManager }) {
     [studyData]
   );
 
-  return <StudyBrowser tabs={tabs} onClickStudy={memoOnClickStudy} />;
+  return (
+    <StudyBrowser
+      activeTabName={activeTabName}
+      tabs={tabs}
+      onClickStudy={memoOnClickStudy}
+      onSetTabActive={onSetTabActive}
+    />
+  );
 }
 
 function getPanelModule({ getDataSources, commandsManager, servicesManager }) {
   const wrappedStudyBrowserPanel = () => {
     return (
-      <StudyBrowserPanel
+      <StudyBrowserUIData
         getDataSources={getDataSources}
         commandsManager={commandsManager}
       />
