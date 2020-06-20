@@ -14,9 +14,11 @@ export default function getAuthorizationHeader({ requestOptions } = {}) {
 
   // Check for OHIF.user since this can also be run on the server
   const accessToken = user && user.getAccessToken && user.getAccessToken();
-
+  console.log(accessToken);
   // Auth for a specific server
-  if (requestOptions && requestOptions.auth) {
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  } else if (requestOptions && requestOptions.auth) {
     if (typeof requestOptions.auth === 'function') {
       // Custom Auth Header
       headers.Authorization = requestOptions.auth(requestOptions);
@@ -26,9 +28,6 @@ export default function getAuthorizationHeader({ requestOptions } = {}) {
     }
   }
   // Auth for the user's default
-  else if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
-  }
-
+  headers.Authorization = 'Bearer ' + localStorage.getItem('token');
   return headers;
 }

@@ -104,7 +104,10 @@ export default function init({ servicesManager, configuration }) {
     // An alternative approach would be to remove the `drawHandlesOnHover` config
     // from the supported configuration properties in `cornerstone-tools`
     const toolsWithHideableHandles = annotations.filter(
-      tool => !['RectangleRoiTool', 'EllipticalRoiTool'].includes(tool.name)
+      tool =>
+        !['RectangleRoiTool', 'EllipticalRoiTool', 'FreehandRoiTool'].includes(
+          tool.name
+        )
     );
 
     let parsedProps = { ...props };

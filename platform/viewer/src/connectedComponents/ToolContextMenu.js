@@ -9,6 +9,7 @@ const toolTypes = [
   'Length',
   'FreehandMouse',
   'EllipticalRoi',
+  'FreehandRoi',
   'CircleRoi',
   'RectangleRoi',
 ];

@@ -158,6 +158,15 @@ const definitions = [
         commandOptions: { toolName: 'EllipticalRoi' },
       },
       {
+        id: 'FreehandRoi',
+        label: 'Freehand',
+        icon: 'edit',
+        //
+        type: TOOLBAR_BUTTON_TYPES.SET_TOOL_ACTIVE,
+        commandName: 'setToolActive',
+        commandOptions: { toolName: 'FreehandRoi' },
+      },
+      {
         id: 'RectangleRoi',
         label: 'Rectangle',
         icon: 'square-o',

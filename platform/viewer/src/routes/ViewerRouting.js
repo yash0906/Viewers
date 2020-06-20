@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { utils, user } from '@ohif/core';
 //
+import OHIF from '@ohif/core';
 import ConnectedViewerRetrieveStudyData from '../connectedComponents/ConnectedViewerRetrieveStudyData';
 import useServer from '../customHooks/useServer';
 import useQuery from '../customHooks/useQuery';
@@ -36,11 +37,13 @@ function ViewerRouting({ match: routeMatch, location: routeLocation }) {
   // See: `getAuthorizationHeaders.js`
   let query = useQuery();
   const authToken = query.get('token');
-
+  console.log(authToken);
   if (authToken) {
     user.getAccessToken = () => authToken;
   }
-
+  console.log('qweqwe', user.getAccessToken());
+  const headers = OHIF.DICOMWeb.getAuthorizationHeader();
+  console.log(headers);
   const server = useServer({ project, location, dataset, dicomStore });
   const studyUIDs = UrlUtil.paramString.parseParam(studyInstanceUIDs);
   const seriesUIDs = getSeriesInstanceUIDs(seriesInstanceUIDs, routeLocation);

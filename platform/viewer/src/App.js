@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { hot } from 'react-hot-loader/root';
-
 import OHIFCornerstoneExtension from '@ohif/extension-cornerstone';
 
 import {
@@ -183,6 +182,7 @@ class App extends Component {
                             <OHIFStandaloneViewer
                               userManager={this._userManager}
                             />
+                            {/* <Dummy /> */}
                           </ModalProvider>
                         </DialogProvider>
                       </SnackbarProvider>
@@ -206,6 +206,7 @@ class App extends Component {
                   <DialogProvider service={UIDialogService}>
                     <ModalProvider modal={OHIFModal} service={UIModalService}>
                       <OHIFStandaloneViewer />
+                      {/* <Dummy /> */}
                     </ModalProvider>
                   </DialogProvider>
                 </SnackbarProvider>
@@ -266,9 +267,9 @@ function _initExtensions(extensions, cornerstoneExtensionConfig, appConfig) {
     api: {
       contexts: CONTEXTS,
       hooks: {
-        useAppContext
-      }
-    }
+        useAppContext,
+      },
+    },
   });
 
   const requiredExtensions = [

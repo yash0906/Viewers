@@ -26,7 +26,6 @@ class OHIFStandaloneViewer extends Component {
   state = {
     isLoading: false,
   };
-
   static propTypes = {
     history: PropTypes.object.isRequired,
     user: PropTypes.object,
@@ -36,6 +35,7 @@ class OHIFStandaloneViewer extends Component {
   };
 
   componentDidMount() {
+    console.log('asdadadasdadasddddddddd');
     this.unlisten = this.props.history.listen((location, action) => {
       if (this.props.setContext) {
         this.props.setContext(window.location.pathname);
@@ -191,8 +191,8 @@ class OHIFStandaloneViewer extends Component {
                   {match === null ? (
                     <></>
                   ) : (
-                      <Component match={match} location={this.props.location} />
-                    )}
+                    <Component match={match} location={this.props.location} />
+                  )}
                 </CSSTransition>
               )}
             </Route>

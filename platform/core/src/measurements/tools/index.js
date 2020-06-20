@@ -1,6 +1,7 @@
 import { arrowAnnotate } from './arrowAnnotate';
 import { bidirectional } from './bidirectional';
 import { ellipticalRoi } from './ellipticalRoi';
+import { freehandRoi } from './freehandRoi';
 import { circleRoi } from './circleRoi';
 import { freehandMouse } from './freehandMouse';
 import { length } from './length';
@@ -15,6 +16,7 @@ export {
   arrowAnnotate,
   bidirectional,
   ellipticalRoi,
+  freehandRoi,
   circleRoi,
   freehandMouse,
   length,

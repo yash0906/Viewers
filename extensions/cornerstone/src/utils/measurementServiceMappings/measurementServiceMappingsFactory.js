@@ -5,6 +5,7 @@ const SUPPORTED_TOOLS = [
   'EllipticalRoi',
   'RectangleRoi',
   'ArrowAnnotate',
+  'FreehandRoi',
 ];
 
 const measurementServiceMappingsFactory = measurementService => {
@@ -108,6 +109,7 @@ const measurementServiceMappingsFactory = measurementService => {
       EllipticalRoi: ELLIPSE,
       RectangleRoi: POLYLINE,
       ArrowAnnotate: POINT,
+      FreehandRoi: POLYLINE,
     };
 
     return TOOL_TYPE_TO_VALUE_TYPE[toolType];

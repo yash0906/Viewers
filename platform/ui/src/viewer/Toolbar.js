@@ -80,6 +80,12 @@ function getDefaultButtonData() {
       icon: 'circle-o',
     },
     {
+      id: 'freehandRoi',
+      title: 'Freehand ROI',
+      className: 'imageViewerTool',
+      icon: 'edit',
+    },
+    {
       id: 'rectangleRoi',
       title: 'Rectangle ROI',
       className: 'imageViewerTool',
